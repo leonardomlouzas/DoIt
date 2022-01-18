@@ -8,13 +8,9 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 
-import { FaExclamation } from "react-icons/fa";
-
 import { useState, useEffect, useCallback, useRef } from "react";
 import { FieldError } from "react-hook-form";
 import { IconType } from "react-icons";
-
-import { string } from "yup";
 
 interface InputProps extends ChakraInputProps {
   name: string;
@@ -41,7 +37,7 @@ export const Input = ({
         )}
         <ChakraInput
           name={name}
-          b="gray.50"
+          bg="gray.50"
           variant="outline"
           _hover={{ bgColor: "gray.100" }}
           _placeholder={{ color: "gray.300" }}

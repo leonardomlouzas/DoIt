@@ -1,4 +1,5 @@
 import { Flex, Grid, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import { FaEnvelope, FaLock } from "react-icons/fa";
 import LogoSecondary from "../../assets/logo-secondary.svg";
 
 import { Input } from "../../components/Form/Input";
@@ -37,8 +38,17 @@ export const Login = () => (
       >
         <Heading size="lg">Bem-vindo de volta!</Heading>
         <VStack spacing="5" mt="6">
-          <Input />
-          <Input />
+          <Input
+            icon={FaEnvelope}
+            name="email"
+            placeholder="Digite seu login"
+          />
+          <Input
+            mt="4"
+            icon={FaLock}
+            name="password"
+            placeholder="Digite sua senha"
+          />
         </VStack>
       </Grid>
     </Flex>
