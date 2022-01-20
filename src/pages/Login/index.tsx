@@ -1,56 +1,146 @@
-import { Flex, Grid, Heading, Image, Text, VStack } from "@chakra-ui/react";
+import {
+  Flex,
+  Grid,
+  Heading,
+  Image,
+  Text,
+  VStack,
+  Button,
+  Box,
+} from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import LogoSecondary from "../../assets/logo-secondary.svg";
-
 import { Input } from "../../components/Form/Input";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useState } from "react";
 
-export const Login = () => (
-  <Flex
-    padding="10px 15px"
-    alignItems="center"
-    height="100vh"
-    bgGradient="linear(to-r, purple.800 65%, white 35%)"
-    color="white"
-  >
+const signInSchema = yup.object().shape({
+  email: yup.string().required("Email obrigatório").email("Email inválido"),
+  password: yup.string().required("Senha obrigatória"),
+});
+
+interface SignInData {
+  email: string;
+  password: string;
+}
+
+export const Login = () => {
+  const [loading, setLoading] = useState(false);
+
+  const {
+    formState: { errors },
+    register,
+    handleSubmit,
+  } = useForm<SignInData>({
+    resolver: yupResolver(signInSchema),
+  });
+
+  const handleSignIn = (data: SignInData) => console.log(data);
+
+  return (
     <Flex
-      w="100%"
-      justifyContent="center"
-      flexDirection="row"
+      padding={["10px 15px", "10px 15px", "0px", "0px"]}
       alignItems="center"
+      justifyContent="center"
+      height={["auto", "auto", "100vh", "100vh"]}
+      bgGradient={[
+        "linear(to-b, purple.800 65%, white 35%)",
+        "linear(to-b, purple.800 65%, white 35%)",
+        "linear(to-r, purple.800 65%, white 35%)",
+        "linear(to-r, purple.800 65%, white 35%)",
+      ]}
+      color="white"
     >
-      <Grid w="100%" paddingRight="100px">
-        <Image src={LogoSecondary} alt="doit" boxSize="120px" />
-        <Heading as="h1">O jeito fácil, grátis</Heading>
-        <Text>
-          Flexível e atrativo de gerenciar
-          <b> seus projetos em uma única plataforma</b>
-        </Text>
-      </Grid>
-      <Grid
-        as="form"
-        mt="4"
-        w="100%"
-        padding="30px 15px"
-        border="3px solid"
-        borderColor="gray.100"
-        bg="white"
-        color="gray.900"
+      <Flex
+        w={["100%", "100%", "90%", "65%"]}
+        justifyContent="center"
+        flexDirection={["column", "column", "row", "row"]}
+        alignItems="center"
       >
-        <Heading size="lg">Bem-vindo de volta!</Heading>
-        <VStack spacing="5" mt="6">
-          <Input
-            icon={FaEnvelope}
-            name="email"
-            placeholder="Digite seu login"
+        <Grid w={["100%", "100%", "50%", "50%"]} paddingRight="100px">
+          <Image
+            src={LogoSecondary}
+            alt="doit"
+            boxSize={["120px", "120px", "150px", "150px"]}
           />
-          <Input
-            mt="4"
-            icon={FaLock}
-            name="password"
-            placeholder="Digite sua senha"
-          />
-        </VStack>
-      </Grid>
+          <Heading mt="4" as="h1">
+            O jeito fácil, grátis
+          </Heading>
+          <Text maxW={["150px", "250px", "350px"]}>
+            Flexível e atrativo de gerenciar
+            <b> seus projetos em uma única plataforma</b>
+          </Text>
+        </Grid>
+        <Grid
+          onSubmit={handleSubmit(handleSignIn)}
+          as="form"
+          padding="30px 15px"
+          border="3px solid"
+          borderColor="gray.100"
+          bg="white"
+          color="gray.900"
+          mt={["4", "4", "0"]}
+          w={["100%", "100%", "40%", "40%"]}
+        >
+          <Heading size="lg">Bem-vindo de volta!</Heading>
+          <VStack spacing="5" mt="6">
+            <Box w="100%">
+              <Input
+                placeholder="Digite seu login"
+                icon={FaEnvelope}
+                label="Login"
+                type="email"
+                error={errors.email}
+                {...register("email")}
+              />
+              {!errors.email && (
+                <Text ml="1" mt="1" color="gray.300">
+                  Exemplo: nome@email.com
+                </Text>
+              )}
+            </Box>
+            <Input
+              type="password"
+              placeholder="Digite sua senha"
+              label="Senha"
+              error={errors.password}
+              icon={FaLock}
+              {...register("password")}
+            />
+          </VStack>
+          <VStack mt="4" spacing="5">
+            <Button
+              isLoading={loading}
+              bg="purple.800"
+              w="100%"
+              color="white"
+              h="60px"
+              borderRadius="8px"
+              _hover={{
+                background: "purple.900",
+              }}
+              type="submit"
+            >
+              Entrar
+            </Button>
+            <Text color="gray.400">Ainda não possui uma conta?</Text>
+            <Button
+              bg="gray.100"
+              w="100%"
+              color="gray.300"
+              h="60px"
+              borderRadius="8px"
+              _hover={{
+                background: "gray.200",
+              }}
+            >
+              Cadastrar
+            </Button>
+          </VStack>
+        </Grid>
+      </Flex>
     </Flex>
-  </Flex>
-);
+  );
+};
